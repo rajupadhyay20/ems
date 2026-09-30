@@ -6,15 +6,16 @@ app = Flask(__name__)
 DATABASE = "employee.db"
 
 
-# Database connection
+# ---------------- DATABASE ----------------
+
 def get_db():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     return conn
 
 
-# Create database and table
 def create_database():
+
     conn = get_db()
 
     conn.execute("""
@@ -32,9 +33,15 @@ def create_database():
     conn.close()
 
 
-# Home page
+# Create database when app starts
+create_database()
+
+
+# ---------------- HOME ----------------
+
 @app.route("/")
 def home():
+
     conn = get_db()
 
     total_employees = conn.execute(
@@ -49,7 +56,8 @@ def home():
     )
 
 
-# Add employee
+# ---------------- ADD EMPLOYEE ----------------
+
 @app.route("/add", methods=["GET", "POST"])
 def add_employee():
 
@@ -67,7 +75,13 @@ def add_employee():
             INSERT INTO employees
             (name, email, phone, department, salary)
             VALUES (?, ?, ?, ?, ?)
-        """, (name, email, phone, department, salary))
+        """, (
+            name,
+            email,
+            phone,
+            department,
+            salary
+        ))
 
         conn.commit()
         conn.close()
@@ -77,7 +91,8 @@ def add_employee():
     return render_template("add_employee.html")
 
 
-# View employees
+# ---------------- VIEW EMPLOYEES ----------------
+
 @app.route("/employees")
 def employees():
 
@@ -95,7 +110,8 @@ def employees():
     )
 
 
-# Delete employee
+# ---------------- DELETE EMPLOYEE ----------------
+
 @app.route("/delete/<int:id>")
 def delete_employee(id):
 
@@ -112,9 +128,9 @@ def delete_employee(id):
     return redirect("/employees")
 
 
-# Run application
+# ---------------- RUN ----------------
+
 if __name__ == "__main__":
-    create_database()
 
     app.run(
         host="0.0.0.0",
