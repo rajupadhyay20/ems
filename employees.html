@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employees</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav>
+    <h2>👨‍💼 Employee Management System</h2>
+
+    <div>
+        <a href="/">Home</a>
+        <a href="/employees">Employees</a>
+        <a href="/add">Add Employee</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>Employee List</h1>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Action</th>
+        </tr>
+
+        {% for employee in employees %}
+
+        <tr>
+            <td>{{ employee["id"] }}</td>
+            <td>{{ employee["name"] }}</td>
+            <td>{{ employee["email"] }}</td>
+            <td>{{ employee["phone"] }}</td>
+            <td>{{ employee["department"] }}</td>
+            <td>₹{{ employee["salary"] }}</td>
+
+            <td>
+                <a class="delete"
+                   href="/delete/{{ employee['id'] }}"
+                   onclick="return confirm('Delete this employee?')">
+                   Delete
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <a class="button" href="/add">+ Add Employee</a>
+
+</div>
+
+</body>
+</html>
